@@ -11,6 +11,7 @@ INCLUDEPATH += \
 	$$PWD/../../qrgui/thirdparty \
 	
 HEADERS = \
+        ../../../qrgui/dialogs/preferencesPages/preferencesPage.h \
         graphBeautifier.h
 SOURCES = \
         graphBeautifier.cpp

@@ -1,37 +1,63 @@
 #include "graphBeautifier.h"
 
+#include <QtCore/QProcess>
+#include <QtWidgets/QFileDialog>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QMessageBox>
+
+#include "../../qrutils/xmlUtils.h"
+#include "../../qrutils/outFile.h"
+#include "../../qrkernel/settingsManager.h"
+
 // Q_EXPORT_PLUGIN2(<graphBeautifier>, <graphBeautifier::GraphBeautifier>);
 
 using namespace qReal;
 using namespace graphBeautifier;
 
-GraphBeautifier::GraphBeautifier()
-	: mAction(tr("beautify"), NULL)
+GraphBeautifierPlugin::GraphBeautifierPlugin()
+    : mAction(NULL)
 {
 	connect(&mAction, SIGNAL(triggered()), this, SLOT(beautify()));
 }
 
-GraphBeautifier::~GraphBeautifier()
+GraphBeautifierPlugin::~GraphBeautifierPlugin()
 {
 }
 
-void GraphBeautifier::init(PluginConfigurator const &configurator)
+void GraphBeautifierPlugin::init(PluginConfigurator const &configurator)
 {
-	// mErrorReporter = configurator.mainWindowInterpretersInterface().errorReporter(); //it possible to not work. if so -- add it.
-	mLogicalModelApi = &configurator.logicalModelApi();
+    mLogicalModelApi = &configurator.logicalModelApi();
 	mGraphicalModelApi = &configurator.graphicalModelApi();
 
+    mMainWindowIFace = &configurator.mainWindowInterpretersInterface();
+
 }
 
-QList<qReal::ActionInfo> GraphBeautifier::actions()
+QList<qReal::ActionInfo> GraphBeautifierPlugin::actions()
 {
-	qReal::ActionInfo info(&mAction, "file", "tools");
-	QList<qReal::ActionInfo> result;
-	result << info;
-	return result;
+    mAction.setText(tr("Beautify"));
+    ActionInfo generateEditorForQrxcActionInfo(&mAction, "generators", "tools");
+
+    return QList<ActionInfo>() << generateEditorForQrxcActionInfo;
+
 }
 
-void GraphBeautifier::beautify()
+void GraphBeautifierPlugin::beautify()
 {
+    IdList const childrenIDs = mLogicalModelApi->children(Id::rootId());
+//	QHash<QString, IdList> diagramIds;
+//	foreach(Id const &childId, childrenIDs) {
+//		if (childId == mMainWindowIFace->activeDiagram())
+//		{
+//			QString elementName = mGraphicalModelApi->name(childId).replace(" ", "")
+//				.replace("(", "").replace(")", "");
+//			if (!elementName.isEmpty())
+//			{
+//                IdList list;
+//				list << childId;
+//                diagramIds.insert("Filename.qrs", list);
+//			}
+//		}
+//	}
 
 }
